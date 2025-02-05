@@ -7,11 +7,20 @@ editor: visual
 
 ## Wordle
 
-### 1) Create 'load_dictionary()' function
+### 1a) Create 'load_dictionary()' function
 
 ```{r}
-
+load_dictionary <- function(f) {
+  read.table(f, header = TRUE, sep = "\t", stringsAsFactors = FALSE, fill = TRUE)
+}
 ```
+
+### 1b) Create lists
+```{r}
+valid_list <- load_dictionary()
+solution_list <- load_dictionary()
+```
+
 
 ### 2) Update solution_list
 
