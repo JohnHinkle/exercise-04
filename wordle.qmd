@@ -2,6 +2,7 @@
 title: "exercise-04: wordle"
 format: html
 editor: visual
+authors: Thi Yen Do and John Hinkle
 ---
 
 ## Create function 'load_dictionary()'
