@@ -32,7 +32,7 @@ str(solution_list)
 solution_list <- intersect(solution_list$words, valid_list$words)
 ```
 
-## Create pick_solution()
+## Create 'pick_solution()'
 
 ```{r}
 pick_solution <- function(solution_list, word_length = 5) {
@@ -43,13 +43,29 @@ pick_solution <- function(solution_list, word_length = 5) {
 solution <- pick_solution(solution_list)
 ```
 
-## Create play_wordle()
+## Create 'evaluate_guess()'
+
+```{r}
+evaluate_guess <- function(guess, answer) {
+  word_length <- length(answer)
+}
+```
+
+## Create 'play_wordle()'
 
 ```{r}
 play_wordle <- function(solution, solution_list, word_length = 5, num_guesses = 6) {
-  possibleAnswers <- solution[nchar(solution) == word_length]
-  answer <- sample(solution_list, 1)
-  AnswerVec <- strsplit(solution, "")
-  print(paste("You have", nGusses, "chances to guess a word of length", word_length))
+  print(paste("You have", num_guesses, "chances to guess a word of length", word_length))
+  guess_count <- 0
+  letters <- LETTERS
+  while (num_guesses > guess_count) {
+    guess_count <- guess_count + 1
+    guess <- readline("Enter your guess, then press <enter>: ")
+    guess <- toupper(guess)
+    while (nchar(guess) != word_length) {
+      guess <- readline("Guess must be five letters long!")
+    }
+    
+  }
 }
 ```
