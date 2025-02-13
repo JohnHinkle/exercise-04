@@ -36,9 +36,9 @@ solution_list <- intersect(solution_list$words, valid_list$words)
 
 ```{r}
 pick_solution <- function(solution_list, word_length = 5) {
-  subset(solution_list, nchar(solution_list) == word_length)
-  sample(solution_list, 1, replace = FALSE, prob = NULL)
-  strsplit(solution_list, "", fixed = FALSE, perl = FALSE, useBytes = FALSE)
+  subset(solution_list, nchar(solution_list) == word_length) |>
+  sample(size = 1) |>
+  strsplit("", fixed = FALSE, perl = FALSE, useBytes = FALSE)
 }
 solution <- pick_solution(solution_list)
 ```
