@@ -38,7 +38,7 @@ solution_list <- intersect(solution_list$words, valid_list$words)
 pick_solution <- function(solution_list, word_length = 5) {
   subset(solution_list, nchar(solution_list) == word_length) |>
   sample(size = 1) |>
-  strsplit("", fixed = FALSE, perl = FALSE, useBytes = FALSE)
+  strsplit("")
 }
 solution <- pick_solution(solution_list)
 ```
@@ -46,7 +46,7 @@ solution <- pick_solution(solution_list)
 ## Create play_wordle()
 
 ```{r}
-play_wordle <- function(solution, valid_list, num_guesses = 6) {
+play_wordle <- function(solution, solution_list, word_length = 5, num_guesses = 6) {
   possibleAnswers <- solution[nchar(solution) == word_length]
   answer <- sample(solution_list, 1)
   AnswerVec <- strsplit(solution, "")
