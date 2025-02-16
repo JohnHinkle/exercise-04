@@ -41,10 +41,10 @@ pick_solution <- function(solution_list, word_length = 5) {
   sample(size = 1) |>
   strsplit("")
 }
-solution <- pick_solution(solution_list)
+solution <- pick_solution(solution_list) # variable that contains the solution
 ```
 
-## Create 'evaluate_guess()'
+## Create 'evaluate_guess()' THIS STEP IS INCOMPLETE
 
 ```{r}
 evaluate_guess <- function(guess, answer) {
@@ -52,7 +52,7 @@ evaluate_guess <- function(guess, answer) {
 }
 ```
 
-## Create 'play_wordle()'
+## Create 'play_wordle()' THIS STEP IS INCOMPLETE
 
 ```{r}
 play_wordle <- function(solution, solution_list, word_length = 5, num_guesses = 6) {
