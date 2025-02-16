@@ -35,6 +35,8 @@ solution_list <- intersect(solution_list$words, valid_list$words)
 
 ## Create 'pick_solution()'
 
+FYI- whenever you are using any function, you do not need to explicitly call the default arguments. For example, when using strsplit(), fixed, perl, and useBytes are all set to be FALSE. This means that you do not have to type out 'strsplit(x, split, fixed = FALSE, perl = FALSE, useBytes = FALSE)' you can just say strsplit(x, split). If you wanted to set, let's say perl to be TRUE, then you would need to type out 'strsplit(x, split, perl = TRUE).
+
 ```{r}
 pick_solution <- function(solution_list, word_length = 5) {
   subset(solution_list, nchar(solution_list) == word_length) |>
@@ -44,13 +46,28 @@ pick_solution <- function(solution_list, word_length = 5) {
 solution <- pick_solution(solution_list) # variable that contains the solution
 ```
 
-## Create 'evaluate_guess()' THIS STEP IS INCOMPLETE
-
-FYI- whenever you are using any function, you do not need to explicitly call the default arguments. For example, when using strsplit(), fixed, perl, and useBytes are all set to be FALSE. This means that you do not have to type out 'strsplit(x, split, fixed = FALSE, perl = FALSE, useBytes = FALSE)' you can just say strsplit(x, split). If you wanted to set, let's say perl to be TRUE, then you would need to type out 'strsplit(x, split, perl = TRUE).
+## Create 'evaluate_guess()' helper function THIS IS MOSTLY COMPLETE
 
 ```{r}
-evaluate_guess <- function(guess, answer) {
-  word_length <- length(answer)
+evaluate_guess <- function(guess, solution) {
+  word_length <- length(solution)
+  spaces <- rep("_", word_length)
+  for (i in 1:word_length) {
+    if(guess[i] == solution[i]){
+      spaces[i] <- "*"
+      solution[i] <- "-"
+    }
+  }
+  for (i in 1:word_length) {
+    if(spaces[i] != "*"){
+      x <- match(guess[i], solution)
+      if(!is.na(x)) {
+        spaces[i] <- "+"
+        answer[x] <- "-"
+      }
+    }
+  }
+  spaces
 }
 ```
 
