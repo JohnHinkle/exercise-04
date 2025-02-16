@@ -46,7 +46,7 @@ solution <- pick_solution(solution_list) # variable that contains the solution
 
 ## Create 'evaluate_guess()' THIS STEP IS INCOMPLETE
 
-FYI- whenever you are using any function, you do not need to explicitly call the default arguments. For example, when using strsplit(), fixed, perl, and useBytes are all set to be FALSE. This means that you do not have to type out 'strsplit(x, split, fixed = FALSE, perl = FALSE, useBytes = FALSE)' you can just say strsplit(x, split).
+FYI- whenever you are using any function, you do not need to explicitly call the default arguments. For example, when using strsplit(), fixed, perl, and useBytes are all set to be FALSE. This means that you do not have to type out 'strsplit(x, split, fixed = FALSE, perl = FALSE, useBytes = FALSE)' you can just say strsplit(x, split). If you wanted to set, let's say perl to be TRUE, then you would need to type out 'strsplit(x, split, perl = TRUE).
 
 ```{r}
 evaluate_guess <- function(guess, answer) {
