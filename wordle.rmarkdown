@@ -5,7 +5,11 @@ editor: visual
 authors: Thi Yen Do and John Hinkle
 ---
 
+
+
 ## Create function 'load_dictionary()'
+
+
 
 ```{r}
 load_dictionary <- function(f) {
@@ -13,29 +17,45 @@ load_dictionary <- function(f) {
 }
 ```
 
+
+
 ## Create two lists, "valid_list" and "solution_list"
+
+
 
 ```{r}
 valid_list <- load_dictionary("collins-scrabble-words-2019.txt")
 solution_list <- load_dictionary("google-10000-english-usa-no-swears.txt")
 ```
 
+
+
 ## Check that the lists contain characters
+
+
 
 ```{r}
 str(valid_list)
 str(solution_list)
 ```
 
+
+
 ## Update "solution_list" to only include words included in "valid_list" using the 'intersect()' function
+
+
 
 ```{r}
 solution_list <- intersect(solution_list$words, valid_list$words)
 ```
 
+
+
 ## Create 'pick_solution()'
 
 FYI- whenever you are using any function, you do not need to explicitly call the default arguments. For example, when using strsplit(), fixed, perl, and useBytes are all set to be FALSE. This means that you do not have to type out 'strsplit(x, split, fixed = FALSE, perl = FALSE, useBytes = FALSE)' you can just say strsplit(x, split). If you wanted to set, let's say perl to be TRUE, then you would need to type out 'strsplit(x, split, perl = TRUE).
+
+
 
 ```{r}
 pick_solution <- function(solution_list, word_length = 5) {
@@ -47,7 +67,11 @@ pick_solution(solution_list)
 solution <- pick_solution(solution_list) # variable that contains the solution
 ```
 
+
+
 ## Create 'evaluate_guess()' helper function
+
+
 
 ```{r}
 evaluate_guess <- function(guess, solution) {
@@ -77,7 +101,11 @@ evaluate_guess(strsplit("flour", "")[[1]],
                strsplit("rainy", "")[[1]])
 ```
 
+
+
 ## Create 'play_wordle()'
+
+
 ```{r}
 play_wordle <- function(solution_list, word_length = 5, num_guesses = 6) {
   print(paste("You have", num_guesses, "chances to guess a word of length", word_length))
@@ -121,3 +149,4 @@ play_wordle <- function(solution_list, word_length = 5, num_guesses = 6) {
 
 play_wordle(solution_list)
 ```
+

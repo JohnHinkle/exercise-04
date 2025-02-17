@@ -2,6 +2,8 @@
 .Rhistory
 .Rapp.history
 
+*testsolution*
+testsolution.R
 # Session Data files
 .RData
 .RDataTmp
