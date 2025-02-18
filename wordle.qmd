@@ -5,6 +5,10 @@ editor: visual
 authors: Thi Yen Do and John Hinkle
 ---
 
+# Exercise 04: Program a Word Game
+
+In this document, we have written code to play a word game closely modeled on the popular game "Wordle".
+
 ## Create function 'load_dictionary()'
 
 ```{r}
@@ -49,12 +53,15 @@ evaluate_guess <- function(guess, solution) {
   word_length <- length(solution)
   spaces <- rep("_", word_length)
   answer <- rep("_", word_length)
+  
+  # Is the letter an exact match (correct letter and position)?
   for (i in 1:word_length) {
     if(guess[i] == solution[i]){
       spaces[i] <- "*"
       solution[i] <- "-"
     }
   }
+  # Is the letter in the solution, but in the incorrect position?
   for (i in 1:word_length) {
     if(spaces[i] != "*"){
       x <- match(guess[i], solution)
@@ -70,42 +77,50 @@ evaluate_guess <- function(guess, solution) {
 
 ## Create 'play_wordle()'
 
+This function takes in three arguments, 1) the solution_list, 2) word_length, and 3) num_guesses. The only required argument is 'solution_list'. We created the solution list earlier in this document.The default word length ('word_length') is 5 letters. The default number of guesses allowed ('num_guesses') is 6. These are the same as wordle, but you may update them (ex. play a game based on 4 letter words with only 5 guesses allowed).
+
 ```{r}
 play_wordle <- function(solution_list, word_length = 5, num_guesses = 6) {
   print(paste("You have", num_guesses, "chances to guess a word of length", word_length))
   print("Enter 'iquit' to quit the game and reveal the solution")
   
-  guess_count <- 0
-  solution <- pick_solution(solution_list) 
-  solution_vector <- strsplit(solution, "")[[1]]
-  guess_vector <- character(0)
-  lettersLeft <- LETTERS
+  guess_count <- 0 # guess count starts at 0
+  solution <- pick_solution(solution_list) # pick a solution
+  solution_vector <- strsplit(solution, "")[[1]] # convert solution into a vector of letters
+  guess_vector <- character(0) # create a vector to store guesses
+  lettersLeft <- LETTERS # create a letters vector from the LETTERS vector in R
   
   while (num_guesses > guess_count) {
-    guess_count <- guess_count + 1
+    guess_count <- guess_count + 1 # count guesses
     guess <- readline("Enter your guess, then press <enter>: ")
     
+    # check if the player wants to quit the game
     if (tolower(guess) == "iquit") {
-        print("You quit :|")
+        print(paste("You quit :| The answer was", solution))
+        print("You guessed:")
+        print(guess_vector)
+        print(paste("You made", guess_count-1, "guesses"))
         break
     }
     
     while (nchar(guess) != word_length || !(toupper(guess) %in% solution_list) || toupper(guess) %in% guess_vector) {
+      # check that the guess is of valid length
       if (nchar(guess) != word_length) {
         guess <- readline(paste("Guess must be", word_length, "letters long! Try another guess:"))
-      } else if (toupper(guess) %in% guess_vector) {
+      } else if (toupper(guess) %in% guess_vector) { # check that the guess is a new guess
         guess <- readline("You already guessed this word! Please guess a different word: ")
-      } else if (!(toupper(guess) %in% solution_list)) {
+      } else if (!(toupper(guess) %in% solution_list)) { # check that the guess is possible
         guess <- readline("This guess is not in the list of possible solutions! Try another guess: ")
+        break
       }
     }
     
     
-    guess <- toupper(guess)
-    guess_vector <- append(guess_vector, guess)
-    space <- strsplit(guess, "")[[1]]
+    guess <- toupper(guess) # convert guess to all uppercase letters
+    guess_vector <- append(guess_vector, guess) # add guess to guess_vector
+    space <- strsplit(guess, "")[[1]] # split guess into vector of letters
     
-    # Evaluate guess and update keyboard
+    # Evaluate guess and update the list of remaining "unguessed" letters
     response_vector <- evaluate_guess(space, solution_vector)
     lettersLeft <- setdiff(lettersLeft, space)
     
@@ -113,11 +128,11 @@ play_wordle <- function(solution_list, word_length = 5, num_guesses = 6) {
     print(paste(strsplit(guess, "")[[1]], collapse = " "))
     print(paste(response_vector, collapse = " "))
     
-    guess_left <- num_guesses - guess_count
+    guess_left <- num_guesses - guess_count # how many guesses remain
     print(paste("You have", guess_left, "guesses left"))
     print(paste(c("Letters left:", lettersLeft), collapse = " "))
 
-    if (all(response_vector == "*")) {
+    if (all(response_vector == "*")) { # if the player wins
       print("You won!")
       print("You guessed:")
       print(guess_vector)
@@ -126,16 +141,19 @@ play_wordle <- function(solution_list, word_length = 5, num_guesses = 6) {
     }
   }
   
-  if (num_guesses <= guess_count) {
+  if (num_guesses <= guess_count) { # if the player loses
     print(paste("Sorry, you lost! The answer was", solution))
     print("You guessed:")
     print(guess_vector)
     print(paste("You made", guess_count, "guesses"))
+    break
   }
 }
 ```
 
 ## Play Wordle
+
+Run this code chunk to play wordle
 
 ```{r}
 #| eval: false
