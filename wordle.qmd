@@ -94,27 +94,38 @@ play_wordle <- function(solution_list, word_length = 5, num_guesses = 6) {
     guess_count <- guess_count + 1 # count guesses
     guess <- readline("Enter your guess, then press <enter>: ")
     
-    # check if the player wants to quit the game
+    # Check if the player wants to quit the game before anything else
     if (tolower(guess) == "iquit") {
         print(paste("You quit :| The answer was", solution))
         print("You guessed:")
         print(guess_vector)
-        print(paste("You made", guess_count-1, "guesses"))
+        print(paste("You made", guess_count-1, "guesses")) # subtract 1 from guess_count so that the quit command is not counted as a guess
         break
     }
     
+    # See if the guess is valid
     while (nchar(guess) != word_length || !(toupper(guess) %in% solution_list) || toupper(guess) %in% guess_vector) {
-      # check that the guess is of valid length
-      if (nchar(guess) != word_length) {
+      if (nchar(guess) != word_length) { # check that the guess is of valid length
         guess <- readline(paste("Guess must be", word_length, "letters long! Try another guess:"))
       } else if (toupper(guess) %in% guess_vector) { # check that the guess is a new guess
         guess <- readline("You already guessed this word! Please guess a different word: ")
       } else if (!(toupper(guess) %in% solution_list)) { # check that the guess is possible
         guess <- readline("This guess is not in the list of possible solutions! Try another guess: ")
+      }
+      
+      # Re-check if the player wants to quit after each invalid guess
+      if (tolower(guess) == "iquit") {
+        print(paste("You quit :| The answer was", solution))
+        print("You guessed:")
+        print(guess_vector)
+        print(paste("You made", guess_count-1, "guesses")) # subtract 1 from guess_count so that the quit command is not counted as a guess
         break
       }
     }
     
+    if (tolower(guess) == "iquit") {
+      break
+    }
     
     guess <- toupper(guess) # convert guess to all uppercase letters
     guess_vector <- append(guess_vector, guess) # add guess to guess_vector
@@ -146,7 +157,6 @@ play_wordle <- function(solution_list, word_length = 5, num_guesses = 6) {
     print("You guessed:")
     print(guess_vector)
     print(paste("You made", guess_count, "guesses"))
-    break
   }
 }
 ```
