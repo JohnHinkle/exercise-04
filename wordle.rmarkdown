@@ -51,25 +51,20 @@ solution_list <- intersect(solution_list$words, valid_list$words)
 
 
 
-## Create 'pick_solution()'
-
-FYI- whenever you are using any function, you do not need to explicitly call the default arguments. For example, when using strsplit(), fixed, perl, and useBytes are all set to be FALSE. This means that you do not have to type out 'strsplit(x, split, fixed = FALSE, perl = FALSE, useBytes = FALSE)' you can just say strsplit(x, split). If you wanted to set, let's say perl to be TRUE, then you would need to type out 'strsplit(x, split, perl = TRUE).
+## Create 'pick_solution()' function
 
 
 
 ```{r}
 pick_solution <- function(solution_list, word_length = 5) {
   subset(solution_list, nchar(solution_list) == word_length) |>
-  sample(size = 1) 
-  ##|> strsplit("")
+  sample(size = 1)
 }
-pick_solution(solution_list)
-solution <- pick_solution(solution_list) # variable that contains the solution
 ```
 
 
 
-## Create 'evaluate_guess()' helper function
+## Create 'evaluate_guess()' function
 
 
 
@@ -95,10 +90,6 @@ evaluate_guess <- function(guess, solution) {
   }
   spaces
 }
-
-# example
-evaluate_guess(strsplit("flour", "")[[1]], 
-               strsplit("rainy", "")[[1]])
 ```
 
 
@@ -106,47 +97,66 @@ evaluate_guess(strsplit("flour", "")[[1]],
 ## Create 'play_wordle()'
 
 
+
 ```{r}
 play_wordle <- function(solution_list, word_length = 5, num_guesses = 6) {
   print(paste("You have", num_guesses, "chances to guess a word of length", word_length))
+  print("Enter 'iquit' to quit the game and reveal the solution")
   guess_count <- 0
   solution <- pick_solution(solution_list) 
-  solutionVec <- strsplit(solution, "")[[1]]
+  solution_vector <- strsplit(solution, "")[[1]]
+  guess_vector <- character(0)
   lettersLeft <- LETTERS
   while (num_guesses > guess_count) {
     guess_count <- guess_count + 1
     guess <- readline("Enter your guess, then press <enter>: ")
-    while (nchar(guess) != word_length) {
-      guess <- readline("Guess must be five letters long!")
+    guess_vector <- append(guess_vector, guess)
+    
+    if (tolower(guess) == "iquit") {
+        print("You quit :|")
+        break
+      }
+    
+    while (nchar(guess) != word_length || !(toupper(guess) %in% solution_list)) {
+      if (nchar(guess) != word_length) {guess <- readline(paste("Guess must be", word_length, "letters long! Try another guess:"))} 
+      else if (!(toupper(guess) %in% solution_list)) {guess <- readline("This guess is not in the list of possible solutions! Try another guess:")
+      }
     }
-    if (identical(guess,"giveu")){
-      ##special code to end the game prematurely
-      print(solution)
-      break
-    }
+    
      guess <- toupper(guess)
      space <- strsplit(guess, "")[[1]]
-     #evaluate guess and update keyboard
-     resVec <- evaluate_guess(space, solutionVec)
      
+     #evaluate guess and update keyboard
+     response_vector <- evaluate_guess(space, solution_vector)
      #update keyboard
      lettersLeft <- setdiff(lettersLeft, space)
      # print result
     print(paste(strsplit(guess, "")[[1]], collapse = " "))
-    print(paste(resVec, collapse = " "))
+    print(paste(response_vector, collapse = " "))
     guess_left <- num_guesses-guess_count;
     print(paste("you have",guess_left,"guesses left"))
     print(paste(c("Letters left:", lettersLeft), collapse = " "))
-    if (all(resVec == "G")) {
+    if (all(response_vector == "*")) {
       print("You won!")
-      return(guess_count)
+      print("You guessed:")
+      print(guess_vector)
+      print(paste("You made", guess_count, "guesses"))
     }
   }
-  print(paste("Sorry, you lost! Answer was ", solution))
-  return(guess_count)
+  print(paste("Sorry, you lost! The answer was ", solution))
+  print("You guessed:")
+  print(guess_vector)
+  print(paste("You made", guess_count, "guesses"))
 }
+```
 
 
+
+## Play Wordle
+
+
+
+```{r}
 play_wordle(solution_list)
 ```
 
