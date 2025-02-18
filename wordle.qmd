@@ -74,57 +74,70 @@ evaluate_guess <- function(guess, solution) {
 play_wordle <- function(solution_list, word_length = 5, num_guesses = 6) {
   print(paste("You have", num_guesses, "chances to guess a word of length", word_length))
   print("Enter 'iquit' to quit the game and reveal the solution")
+  
   guess_count <- 0
   solution <- pick_solution(solution_list) 
   solution_vector <- strsplit(solution, "")[[1]]
   guess_vector <- character(0)
   lettersLeft <- LETTERS
+  
   while (num_guesses > guess_count) {
     guess_count <- guess_count + 1
     guess <- readline("Enter your guess, then press <enter>: ")
-    guess_vector <- append(guess_vector, guess)
     
     if (tolower(guess) == "iquit") {
         print("You quit :|")
         break
-      }
+    }
     
-    while (nchar(guess) != word_length || !(toupper(guess) %in% solution_list)) {
-      if (nchar(guess) != word_length) {guess <- readline(paste("Guess must be", word_length, "letters long! Try another guess:"))} 
-      else if (!(toupper(guess) %in% solution_list)) {guess <- readline("This guess is not in the list of possible solutions! Try another guess:")
+    while (nchar(guess) != word_length || !(toupper(guess) %in% solution_list) || toupper(guess) %in% guess_vector) {
+      if (nchar(guess) != word_length) {
+        guess <- readline(paste("Guess must be", word_length, "letters long! Try another guess:"))
+      } else if (toupper(guess) %in% guess_vector) {
+        guess <- readline("You already guessed this word! Please guess a different word: ")
+      } else if (!(toupper(guess) %in% solution_list)) {
+        guess <- readline("This guess is not in the list of possible solutions! Try another guess: ")
       }
     }
     
-     guess <- toupper(guess)
-     space <- strsplit(guess, "")[[1]]
-     
-     #evaluate guess and update keyboard
-     response_vector <- evaluate_guess(space, solution_vector)
-     #update keyboard
-     lettersLeft <- setdiff(lettersLeft, space)
-     # print result
+    
+    guess <- toupper(guess)
+    guess_vector <- append(guess_vector, guess)
+    space <- strsplit(guess, "")[[1]]
+    
+    # Evaluate guess and update keyboard
+    response_vector <- evaluate_guess(space, solution_vector)
+    lettersLeft <- setdiff(lettersLeft, space)
+    
+    # Print result
     print(paste(strsplit(guess, "")[[1]], collapse = " "))
     print(paste(response_vector, collapse = " "))
-    guess_left <- num_guesses-guess_count;
-    print(paste("you have",guess_left,"guesses left"))
+    
+    guess_left <- num_guesses - guess_count
+    print(paste("You have", guess_left, "guesses left"))
     print(paste(c("Letters left:", lettersLeft), collapse = " "))
+
     if (all(response_vector == "*")) {
       print("You won!")
       print("You guessed:")
       print(guess_vector)
       print(paste("You made", guess_count, "guesses"))
+      break
     }
   }
-  print(paste("Sorry, you lost! The answer was ", solution))
-  print("You guessed:")
-  print(guess_vector)
-  print(paste("You made", guess_count, "guesses"))
+  
+  if (num_guesses <= guess_count) {
+    print(paste("Sorry, you lost! The answer was", solution))
+    print("You guessed:")
+    print(guess_vector)
+    print(paste("You made", guess_count, "guesses"))
+  }
 }
 ```
 
 ## Play Wordle
 
 ```{r}
-#| echo: false
+#| eval: false
 play_wordle(solution_list)
 ```
