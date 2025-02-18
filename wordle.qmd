@@ -33,8 +33,11 @@ str(solution_list)
 
 ## Update "solution_list" to only include words included in "valid_list" using the 'intersect()' function
 
+The updated 'solution_list' contains 8336 words (i.e., possible solutions for the game).
+
 ```{r}
 solution_list <- intersect(solution_list$words, valid_list$words)
+print(paste("The updated 'solution_list' contains", length(solution_list), "words."))
 ```
 
 ## Create 'pick_solution()' function
